@@ -1,0 +1,29 @@
+{
+  "name": "tutorial-fundamentos-programacao",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Tutorial interativo de fundamentos de informatica e programacao",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "pretest": "esbuild src/lib/portugol.ts src/lib/numbers.ts src/lib/sorting.ts src/lib/widget-ids.ts --format=esm --outdir=.tmp --out-extension:.js=.mjs --log-level=error && esbuild src/content/index.ts --bundle --format=esm --outfile=.tmp/content.mjs --log-level=error",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.2",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5"
+  }
+}
