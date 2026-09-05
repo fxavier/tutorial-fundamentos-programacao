@@ -31,9 +31,9 @@ export function Home() {
           Fundamentos de informática<br />e programação
         </h1>
         <p className="mt-3 max-w-2xl text-[1.05rem] leading-relaxed text-body">
-          Doze módulos que vão do transístor ao algoritmo: como um computador funciona por dentro, binário e memória,
-          o modelo OSI, lógica de programação, pseudocódigo, estruturas de dados e complexidade — com
-          ferramentas interativas, quizzes e exercícios resolvidos.
+          Dezasseis módulos que vão do transístor ao pandas: como um computador funciona por dentro, binário e memória,
+          o modelo OSI, lógica de programação, pseudocódigo, estruturas de dados e complexidade, e depois Python a sério —
+          objetos e análise de dados — com ferramentas interativas, quizzes e exercícios resolvidos.
         </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
@@ -109,8 +109,8 @@ export function Home() {
           <li><b className="text-strong">1. Lê e experimenta.</b> Cada módulo tem widgets interativos — mexe neles, não te limites a ler. Aprende-se mais a mudar valores do que a olhar para exemplos.</li>
           <li><b className="text-strong">2. Marca as secções.</b> Ao terminar cada secção, marca-a como lida; o progresso fica guardado neste browser.</li>
           <li><b className="text-strong">3. Faz o quiz.</b> Responde antes de veres as soluções. Errar e perceber porquê é a parte que ensina.</li>
-          <li><b className="text-strong">4. Resolve os exercícios.</b> Tenta sozinho primeiro, usa a pista, e só depois vê a solução. Muitos podem ser testados no editor de Portugol.</li>
-          <li><b className="text-strong">5. Não tenhas pressa.</b> Doze módulos são cerca de {Math.round(TOTAL_MINUTES / 60)} horas de leitura, mas o tempo real com exercícios é várias vezes isso — e é assim que deve ser.</li>
+          <li><b className="text-strong">4. Resolve os exercícios.</b> Tenta sozinho primeiro, usa a pista, e só depois vê a solução. Muitos podem ser testados no editor de Portugol ou no laboratório de Python.</li>
+          <li><b className="text-strong">5. Não tenhas pressa.</b> Dezasseis módulos são cerca de {Math.round(TOTAL_MINUTES / 60)} horas de leitura, mas o tempo real com exercícios é várias vezes isso — e é assim que deve ser.</li>
         </ol>
       </section>
     </div>

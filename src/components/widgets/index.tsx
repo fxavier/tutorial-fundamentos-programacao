@@ -5,6 +5,7 @@ import { OsiSimulator, PacketInspector } from './Network';
 import { TruthTable, Flowchart, DeskCheck } from './Logic';
 import { SortingVisualizer, BinarySearchViz, BigOChart, ComplexityRace } from './Algorithms';
 import { PortugolPlayground } from './Portugol';
+import { PythonLab } from './Python';
 
 export function Widget({ id, props }: { id: WidgetId; props?: Record<string, unknown> }) {
   switch (id) {
@@ -26,6 +27,16 @@ export function Widget({ id, props }: { id: WidgetId; props?: Record<string, unk
     case 'binary-search': return <BinarySearchViz />;
     case 'bigo-chart': return <BigOChart />;
     case 'complexity-race': return <ComplexityRace />;
+    case 'python-lab':
+      return (
+        <PythonLab
+          initial={props?.code as string | undefined}
+          initialInput={props?.input as string | undefined}
+          packages={props?.packages as string[] | undefined}
+          set={props?.set as 'basico' | 'estruturas' | 'poo' | 'pandas' | undefined}
+          compact={props?.compact as boolean | undefined}
+        />
+      );
     case 'portugol':
       return <PortugolPlayground initial={props?.code as string | undefined} initialInput={props?.input as string | undefined} compact={props?.compact as boolean | undefined} />;
   }
@@ -51,4 +62,5 @@ export const WIDGET_CATALOG: { id: WidgetId; name: string; description: string; 
   { id: 'binary-search', name: 'Pesquisa binária', description: 'Corta o problema ao meio e compara com a pesquisa linear.', icon: '🔍' },
   { id: 'bigo-chart', name: 'Gráfico Big-O', description: 'Como o custo cresce com o tamanho da entrada.', icon: '📈' },
   { id: 'complexity-race', name: 'Tempos reais', description: 'Quanto demora cada complexidade com n grande.', icon: '⏱️' },
+  { id: 'python-lab', name: 'Laboratório de Python', description: 'Python 3 real no browser, com pandas. Escreve, corre e vê a saída.', icon: '🐍' },
 ];

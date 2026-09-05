@@ -17,7 +17,8 @@ export type WidgetId =
   | 'cpu-cycle'
   | 'stack-heap'
   | 'packet-inspector'
-  | 'complexity-race';
+  | 'complexity-race'
+  | 'python-lab';
 
 export type Tone = 'info' | 'tip' | 'warn' | 'key' | 'trap';
 
@@ -47,15 +48,19 @@ export interface Question {
   explain: string;
 }
 
-export type ExerciseKind = 'input' | 'open' | 'code';
+export type ExerciseKind = 'input' | 'open' | 'code' | 'predict';
 
 export interface Exercise {
   id: string;
   title: string;
   statement: string;
   kind: ExerciseKind;
-  /** Respostas aceites (normalizadas) quando kind === 'input'. */
+  /** Respostas aceites (normalizadas) quando kind === 'input' ou 'predict'. */
   accept?: string[];
+  /** Código a prever/executar quando kind === 'predict'. */
+  code?: string;
+  /** Pacotes Python a carregar antes de executar `code` (ex.: ['pandas']). */
+  packages?: string[];
   hint?: string;
   solution: string;
   difficulty: 1 | 2 | 3;

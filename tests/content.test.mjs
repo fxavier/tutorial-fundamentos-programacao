@@ -4,7 +4,7 @@ import { MODULES, TRACKS, GLOSSARY } from '../.tmp/content.mjs';
 import { WIDGET_IDS } from '../.tmp/widget-ids.mjs';
 
 test('todos os módulos têm estrutura completa', () => {
-  assert.equal(MODULES.length, 12);
+  assert.equal(MODULES.length, 16);
   for (const m of MODULES) {
     assert.ok(m.id && m.title && m.subtitle && m.icon, `módulo sem metadados: ${m.id}`);
     assert.ok(m.goals.length >= 3, `${m.id}: poucos objetivos`);
@@ -57,8 +57,12 @@ test('exercícios são válidos', () => {
     for (const e of m.exercises) {
       assert.ok(e.solution.length > 20, `${e.id}: solução demasiado curta`);
       assert.ok([1, 2, 3].includes(e.difficulty), `${e.id}: dificuldade inválida`);
-      if (e.kind === 'input') {
+      if (e.kind === 'input' || e.kind === 'predict') {
         assert.ok(Array.isArray(e.accept) && e.accept.length > 0, `${e.id}: exercício de resposta curta sem respostas aceites`);
+      }
+      if (e.kind === 'predict') {
+        assert.ok(typeof e.code === 'string' && e.code.includes('\n') === e.code.includes('\n'), `${e.id}: exercício de previsão sem código`);
+        assert.ok(e.code.length > 10, `${e.id}: código demasiado curto para prever`);
       }
     }
   }
