@@ -1,6 +1,6 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { WidgetShell } from './Shell';
-import { runPython, stopPython, type PyResult } from '../../lib/python';
+import { useMemo, useRef, useState } from 'react';
+import { WidgetShell, ConsoleOutput, useCodeRunner } from './Shell';
+import { pythonRunner } from '../../lib/python';
 
 type ExampleSet = 'basico' | 'estruturas' | 'poo' | 'pandas';
 
@@ -342,47 +342,7 @@ const SET_LABEL: Record<ExampleSet, string> = {
   basico: 'Fundamentos', estruturas: 'Estruturas de dados', poo: 'Objetos', pandas: 'Pandas',
 };
 
-/** Estado partilhado por qualquer sítio que precise de executar Python. */
-export function usePython() {
-  const [busy, setBusy] = useState(false);
-  const [status, setStatus] = useState('');
-  const [result, setResult] = useState<PyResult | null>(null);
-
-  const execute = useCallback(async (code: string, stdin = '', packages?: string[]) => {
-    setBusy(true);
-    setStatus('');
-    setResult(null);
-    try {
-      setResult(await runPython({ code, stdin, packages }, setStatus));
-    } catch {
-      setResult({ output: [], error: 'Execução interrompida.', ms: 0 });
-    }
-    setStatus('');
-    setBusy(false);
-  }, []);
-
-  const abort = useCallback(() => { stopPython(); }, []);
-
-  return { busy, status, result, execute, abort, clear: () => setResult(null) };
-}
-
-export function PythonOutput({ result, busy, status, empty }: { result: PyResult | null; busy: boolean; status: string; empty?: string }) {
-  return (
-    <div className="scrollbar-thin h-full min-h-40 overflow-auto rounded-xl border border-soft bg-slate-950 p-3 font-mono text-[0.8rem] leading-relaxed text-slate-100">
-      {busy && <div className="text-amber-300">{status || 'A executar…'}</div>}
-      {!busy && result === null && <span className="text-slate-500">{empty ?? 'Clica em “Executar” para veres o resultado.'}</span>}
-      {result?.output.map((l, i) => (
-        <div key={i} className={`whitespace-pre-wrap ${l.err ? 'text-rose-300' : ''}`}>{l.text || ' '}</div>
-      ))}
-      {result?.error && (
-        <div className="mt-2 rounded-lg border border-rose-500/50 bg-rose-500/10 px-2.5 py-2 text-rose-300">
-          <b>Erro:</b> {result.error}
-        </div>
-      )}
-      {result && !result.error && <div className="mt-2 text-emerald-400">✓ Terminou em {result.ms} ms.</div>}
-    </div>
-  );
-}
+export const usePython = () => useCodeRunner(pythonRunner);
 
 export function PythonLab({ initial, initialInput, packages, set, compact }: {
   initial?: string; initialInput?: string; packages?: string[]; set?: ExampleSet; compact?: boolean;
@@ -393,6 +353,7 @@ export function PythonLab({ initial, initialInput, packages, set, compact }: {
   const [pkgs, setPkgs] = useState<string[]>(packages ?? examples[0].packages ?? []);
   const areaRef = useRef<HTMLTextAreaElement>(null);
   const { busy, status, result, execute, abort, clear } = usePython();
+  const correr = () => execute({ code, stdin: input, packages: pkgs });
 
   const lines = useMemo(() => code.split('\n').length, [code]);
 
@@ -413,7 +374,7 @@ export function PythonLab({ initial, initialInput, packages, set, compact }: {
       setCode(code.slice(0, s) + '    ' + code.slice(en));
       requestAnimationFrame(() => { el.selectionStart = el.selectionEnd = s + 4; });
     }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); execute(code, input, pkgs); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); correr(); }
   };
 
   return (
@@ -434,7 +395,7 @@ export function PythonLab({ initial, initialInput, packages, set, compact }: {
                 ))}
             </select>
           )}
-          <button className="btn btn-primary btn-sm" onClick={() => execute(code, input, pkgs)} disabled={busy}>
+          <button className="btn btn-primary btn-sm" onClick={() => correr()} disabled={busy}>
             {busy ? 'A correr…' : '▶ Executar'}
           </button>
           {busy && <button className="btn btn-ghost btn-sm" onClick={abort}>■ Parar</button>}
@@ -466,7 +427,7 @@ export function PythonLab({ initial, initialInput, packages, set, compact }: {
           <span className="mb-1 block text-xs font-semibold tracking-wide text-muted uppercase">
             Saída {pkgs.length > 0 && <span className="normal-case">· usa {pkgs.join(', ')}</span>}
           </span>
-          <div className="h-80"><PythonOutput result={result} busy={busy} status={status} /></div>
+          <div className="h-80"><ConsoleOutput result={result} busy={busy} status={status} /></div>
         </div>
       </div>
     </WidgetShell>

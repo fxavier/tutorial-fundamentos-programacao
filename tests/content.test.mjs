@@ -4,7 +4,7 @@ import { MODULES, TRACKS, GLOSSARY } from '../.tmp/content.mjs';
 import { WIDGET_IDS } from '../.tmp/widget-ids.mjs';
 
 test('todos os módulos têm estrutura completa', () => {
-  assert.equal(MODULES.length, 16);
+  assert.equal(MODULES.length, 20);
   for (const m of MODULES) {
     assert.ok(m.id && m.title && m.subtitle && m.icon, `módulo sem metadados: ${m.id}`);
     assert.ok(m.goals.length >= 3, `${m.id}: poucos objetivos`);

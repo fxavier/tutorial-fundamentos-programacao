@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "node --test \"tests/*.test.mjs\"",
-    "pretest": "esbuild src/lib/portugol.ts src/lib/numbers.ts src/lib/sorting.ts src/lib/widget-ids.ts --format=esm --outdir=.tmp --out-extension:.js=.mjs --log-level=error && esbuild src/content/index.ts --bundle --format=esm --outfile=.tmp/content.mjs --log-level=error",
+    "pretest": "esbuild src/lib/portugol.ts src/lib/numbers.ts src/lib/sorting.ts src/lib/widget-ids.ts --format=esm --outdir=.tmp --out-extension:.js=.mjs --log-level=error && esbuild src/content/index.ts --bundle --format=esm --outfile=.tmp/content.mjs --log-level=error && esbuild src/lib/js.worker.ts --bundle --format=esm --outfile=.tmp/js-worker.mjs --log-level=error",
     "typecheck": "tsc -b"
   },
   "dependencies": {

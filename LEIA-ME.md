@@ -1,6 +1,6 @@
 # Fundamentos de Informática e Programação
 
-Tutorial interativo, em português, que vai do transístor ao pandas. Dezasseis módulos com
+Tutorial interativo, em português, que vai do transístor ao Node.js. Vinte módulos com
 ferramentas interativas, quizzes com explicação e exercícios resolvidos — pensado para
 quem está a começar em programação e quer perceber o que acontece por baixo do código.
 
@@ -47,14 +47,19 @@ por isso funciona também a partir de um subdiretório ou do sistema de ficheiro
 | 14 | Estruturas de dados em Python | Listas, compreensões, dicionários, conjuntos, tuplos, pilhas e filas |
 | 15 | Programação orientada a objetos | Classes, `self`, métodos especiais, herança, `@property`, dataclasses |
 | 16 | Análise de dados com pandas | Series, DataFrames, filtros, colunas derivadas, `groupby`, limpeza, `merge` |
+| 17 | JavaScript moderno | `const`/`let`, coerção, `===`, funções, arrays, objetos, desestruturação, erros |
+| 18 | Assíncrono e o event loop | Callbacks, promessas, `async`/`await`, microtarefas, `Promise.all`, `fetch` |
+| 19 | JavaScript avançado | Closures, `this`, protótipos, estilo funcional, ESM/CommonJS, npm, TypeScript |
+| 20 | Node.js | Projeto e npm, módulos, ficheiros, CLI, EventEmitter, servidor HTTP, `node --test` |
 
 ## Ferramentas interativas
 
 Conversor de bases · bits ligados · complemento de dois · calculadora de armazenamento ·
 texto para bits (ASCII/UTF-8) · IEEE 754 · mapa de memória · ciclo da CPU · pilha e heap ·
 simulador OSI · inspetor de pacote · tabela verdade · fluxogramas · teste de mesa ·
-**editor de Portugol executável** · **laboratório de Python com pandas** · ordenação animada ·
-pesquisa binária · gráfico Big-O · tabela de tempos reais.
+**editor de Portugol executável** · **laboratório de Python com pandas** ·
+**laboratório de JavaScript e Node** · ordenação animada · pesquisa binária · gráfico Big-O ·
+tabela de tempos reais.
 
 O editor de Portugol é um interpretador escrito de raiz que corre no browser. Suporta
 variáveis tipadas, vetores de uma e duas dimensões, `se`/`senao`, `enquanto`, `para`,
@@ -67,10 +72,17 @@ apenas o worker, que o botão **Parar** termina. O `input()` lê da caixa de ent
 pandas é descarregado só quando um exemplo precisa dele. É a única parte do tutorial que
 exige ligação à internet, e só na primeira execução.
 
+O laboratório de JavaScript corre no motor do próprio browser, também num worker, e não
+descarrega nada — funciona sem internet. Por cima do JavaScript há um shim de Node: `console`
+com o formato do Node, `process`, `require` de `fs`, `path`, `os`, `events`, `util`, `assert`,
+`crypto` e `node:test`, um sistema de ficheiros em memória e `require("./modulo")` de ficheiros
+locais. Chega para os exemplos de módulos, ficheiros, CLI, eventos e testes correrem de verdade;
+o servidor HTTP fica como código para correr no teu computador.
+
 Os exercícios de previsão mostram um bloco de código e pedem a saída ao aluno; depois de
 responder, um botão executa o código a sério para comparar. As respostas aceites são
-verificadas em `npm test` contra o `python3` local, para não corrigir ninguém com uma
-resposta errada.
+verificadas em `npm test` — as de Python contra o `python3` local, as de JavaScript contra o
+próprio worker do laboratório — para não corrigir ninguém com uma resposta errada.
 
 ## Estrutura do projeto
 
@@ -84,6 +96,8 @@ src/
   lib/
     portugol.ts interpretador de Portugol (léxico, parser, interpretador)
     python.ts   cliente do worker de Python (+ python.worker.ts, que carrega o Pyodide)
+    js.ts       cliente do worker de JavaScript (+ js.worker.ts, com o shim de Node)
+    runner.ts   cliente genérico partilhado pelos dois laboratórios
     numbers.ts  conversões entre bases, complemento de dois, UTF-8, IEEE 754
     sorting.ts  geradores de passos para as animações de ordenação
     progress.ts progresso guardado em localStorage

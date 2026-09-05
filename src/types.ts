@@ -18,7 +18,8 @@ export type WidgetId =
   | 'stack-heap'
   | 'packet-inspector'
   | 'complexity-race'
-  | 'python-lab';
+  | 'python-lab'
+  | 'js-lab';
 
 export type Tone = 'info' | 'tip' | 'warn' | 'key' | 'trap';
 
@@ -61,6 +62,8 @@ export interface Exercise {
   code?: string;
   /** Pacotes Python a carregar antes de executar `code` (ex.: ['pandas']). */
   packages?: string[];
+  /** Linguagem de `code` e da solução. Por omissão, 'python'. */
+  lang?: 'python' | 'js';
   hint?: string;
   solution: string;
   difficulty: 1 | 2 | 3;

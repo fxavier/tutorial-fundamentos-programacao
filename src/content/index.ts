@@ -15,14 +15,19 @@ import { m13 } from './m13-python';
 import { m14 } from './m14-python-estruturas';
 import { m15 } from './m15-python-poo';
 import { m16 } from './m16-pandas';
+import { m17 } from './m17-javascript';
+import { m18 } from './m18-javascript-async';
+import { m19 } from './m19-javascript-avancado';
+import { m20 } from './m20-nodejs';
 
-export const MODULES: Module[] = [m01, m02, m03, m04, m05, m06, m07, m08, m09, m10, m11, m12, m13, m14, m15, m16];
+export const MODULES: Module[] = [m01, m02, m03, m04, m05, m06, m07, m08, m09, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20];
 
 export const TRACKS = [
   { id: 'hardware', name: 'Como a máquina funciona', modules: ['computador', 'binario', 'memoria', 'redes'], color: 'from-sky-500 to-cyan-500' },
   { id: 'logica', name: 'Lógica e algoritmos', modules: ['logica', 'controlo', 'algoritmos'], color: 'from-violet-500 to-fuchsia-500' },
   { id: 'engenharia', name: 'Engenharia de software', modules: ['estruturas', 'complexidade', 'paradigmas', 'ferramentas', 'proximos-passos'], color: 'from-emerald-500 to-teal-500' },
   { id: 'python', name: 'Python na prática', modules: ['python', 'python-estruturas', 'python-poo', 'pandas'], color: 'from-amber-500 to-orange-500' },
+  { id: 'javascript', name: 'JavaScript e Node.js', modules: ['javascript', 'javascript-async', 'javascript-avancado', 'nodejs'], color: 'from-yellow-500 to-lime-500' },
 ];
 
 export function getModule(id: string): Module | undefined {
@@ -89,4 +94,17 @@ export const GLOSSARY: GlossaryEntry[] = [
   { term: 'Series', def: 'Estrutura unidimensional do pandas: valores mais um índice. Uma coluna de um DataFrame.', module: 'pandas' },
   { term: 'Tuplo (tuple)', def: 'Sequência imutável. Pode ser chave de dicionário ou elemento de conjunto; uma lista não pode.', module: 'python-estruturas' },
   { term: 'Vetorização', def: 'Aplicar uma operação a uma coluna inteira de uma vez, em código compilado, em vez de percorrer linha a linha.', module: 'pandas' },
+  { term: 'async / await', def: 'Sintaxe que faz código assíncrono ler-se como síncrono: `await` espera que uma promessa resolva.', module: 'javascript-async' },
+  { term: 'Closure', def: 'Função que se lembra do escopo onde foi criada, mesmo depois de esse escopo terminar. Dá estado privado.', module: 'javascript-avancado' },
+  { term: 'CommonJS / ESM', def: 'Os dois sistemas de módulos do JavaScript: `require`/`module.exports` e `import`/`export`.', module: 'javascript-avancado' },
+  { term: 'Coerção de tipos', def: 'Conversão automática entre tipos feita pelo JavaScript, por exemplo em `1 == "1"`.', module: 'javascript' },
+  { term: 'Event loop', def: 'Ciclo que executa o código síncrono, esvazia as microtarefas e só então tira uma macrotarefa.', module: 'javascript-async' },
+  { term: 'Macrotarefa', def: 'Callback de `setTimeout`, `setInterval` ou de E/S. Só corre depois de esvaziadas todas as microtarefas.', module: 'javascript-async' },
+  { term: 'Microtarefa', def: 'Continuação de uma promessa (`.then`, `await`). Tem prioridade sobre as macrotarefas.', module: 'javascript-async' },
+  { term: 'Node.js', def: 'Ambiente que corre JavaScript fora do browser, com acesso a ficheiros, rede e processos.', module: 'nodejs' },
+  { term: 'npm / package.json', def: 'O gestor de pacotes do Node e o ficheiro que declara nome, scripts e dependências de um projeto.', module: 'javascript-avancado' },
+  { term: 'Promessa (Promise)', def: 'Objeto que representa um valor que ainda não existe: fica pendente, cumprida ou rejeitada.', module: 'javascript-async' },
+  { term: 'Protótipo', def: 'Objeto de onde outro herda propriedades. As classes de JavaScript são açúcar sobre esta cadeia.', module: 'javascript-avancado' },
+  { term: 'this', def: 'Em JavaScript depende de como a função é chamada, não de onde foi escrita.', module: 'javascript-avancado' },
+  { term: 'TypeScript', def: 'JavaScript com tipos verificados na compilação. Os tipos são apagados e não existem em execução.', module: 'javascript-avancado' },
 ];

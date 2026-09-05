@@ -6,6 +6,7 @@ import { TruthTable, Flowchart, DeskCheck } from './Logic';
 import { SortingVisualizer, BinarySearchViz, BigOChart, ComplexityRace } from './Algorithms';
 import { PortugolPlayground } from './Portugol';
 import { PythonLab } from './Python';
+import { JsLab } from './Js';
 
 export function Widget({ id, props }: { id: WidgetId; props?: Record<string, unknown> }) {
   switch (id) {
@@ -37,6 +38,15 @@ export function Widget({ id, props }: { id: WidgetId; props?: Record<string, unk
           compact={props?.compact as boolean | undefined}
         />
       );
+    case 'js-lab':
+      return (
+        <JsLab
+          initial={props?.code as string | undefined}
+          initialArgv={props?.argv as string | undefined}
+          set={props?.set as 'basico' | 'async' | 'avancado' | 'node' | undefined}
+          compact={props?.compact as boolean | undefined}
+        />
+      );
     case 'portugol':
       return <PortugolPlayground initial={props?.code as string | undefined} initialInput={props?.input as string | undefined} compact={props?.compact as boolean | undefined} />;
   }
@@ -63,4 +73,5 @@ export const WIDGET_CATALOG: { id: WidgetId; name: string; description: string; 
   { id: 'bigo-chart', name: 'Gráfico Big-O', description: 'Como o custo cresce com o tamanho da entrada.', icon: '📈' },
   { id: 'complexity-race', name: 'Tempos reais', description: 'Quanto demora cada complexidade com n grande.', icon: '⏱️' },
   { id: 'python-lab', name: 'Laboratório de Python', description: 'Python 3 real no browser, com pandas. Escreve, corre e vê a saída.', icon: '🐍' },
+  { id: 'js-lab', name: 'Laboratório de JavaScript', description: 'JavaScript moderno e Node.js: async, módulos, ficheiros e testes.', icon: '🟨' },
 ];

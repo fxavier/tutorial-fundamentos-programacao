@@ -4,7 +4,9 @@ import { progress, useProgress } from '../lib/progress';
 import { RichText } from './RichText';
 import { CodeBlock } from './CodeBlock';
 import { normalizeAnswer } from '../lib/numbers';
-import { usePython, PythonOutput } from './widgets/Python';
+import { usePython } from './widgets/Python';
+import { useJs } from './widgets/Js';
+import { ConsoleOutput } from './widgets/Shell';
 
 function DifficultyDots({ level }: { level: 1 | 2 | 3 }) {
   return (
@@ -28,6 +30,9 @@ function ExerciseCard({ ex }: { ex: Exercise }) {
   const [value, setValue] = useState('');
   const [check, setCheck] = useState<'idle' | 'ok' | 'no'>('idle');
   const py = usePython();
+  const js = useJs();
+  const lang = ex.lang ?? 'python';
+  const run = lang === 'js' ? js : py;
 
   const verify = () => {
     const accepted = (ex.accept ?? []).map(normalizeAnswer);
@@ -55,7 +60,7 @@ function ExerciseCard({ ex }: { ex: Exercise }) {
         <p className="text-[0.92rem] leading-relaxed"><RichText text={ex.statement} /></p>
 
         {ex.kind === 'predict' && ex.code && (
-          <CodeBlock code={ex.code} lang="python" caption="que saída produz este código?" />
+          <CodeBlock code={ex.code} lang={lang} caption="que saída produz este código?" />
         )}
 
         {(ex.kind === 'input' || ex.kind === 'predict') && (
@@ -72,11 +77,11 @@ function ExerciseCard({ ex }: { ex: Exercise }) {
             {ex.kind === 'predict' && ex.code && (
               <button
                 className="btn btn-ghost"
-                onClick={() => py.execute(ex.code!, '', ex.packages)}
-                disabled={py.busy || !value.trim()}
+                onClick={() => run.execute(lang === 'js' ? { code: ex.code! } : { code: ex.code!, packages: ex.packages })}
+                disabled={run.busy || !value.trim()}
                 title={value.trim() ? 'Corre o código a sério' : 'Escreve primeiro a tua previsão'}
               >
-                {py.busy ? 'A correr…' : '▶ Confirmar a correr'}
+                {run.busy ? 'A correr…' : '▶ Confirmar a correr'}
               </button>
             )}
             {check === 'ok' && <span className="self-center text-sm font-semibold text-emerald-600 dark:text-emerald-400">✓ Certo!</span>}
@@ -84,10 +89,10 @@ function ExerciseCard({ ex }: { ex: Exercise }) {
           </div>
         )}
 
-        {(py.busy || py.result) && (
+        {(run.busy || run.result) && (
           <div className="mt-3">
             <span className="mb-1 block text-xs font-semibold tracking-wide text-muted uppercase">Saída real</span>
-            <PythonOutput result={py.result} busy={py.busy} status={py.status} />
+            <ConsoleOutput result={run.result} busy={run.busy} status={run.status} />
           </div>
         )}
 
@@ -105,7 +110,7 @@ function ExerciseCard({ ex }: { ex: Exercise }) {
         {open && (
           <div className="mt-3 rounded-xl border border-soft surface-sunken p-3.5">
             {ex.solution.includes('\n') && (ex.kind === 'code' || ex.solution.trimStart().startsWith('algoritmo')) ? (
-              <CodeBlock code={ex.solution} lang={ex.solution.trimStart().startsWith('algoritmo') ? 'portugol' : 'python'} caption="solução" />
+              <CodeBlock code={ex.solution} lang={ex.solution.trimStart().startsWith('algoritmo') ? 'portugol' : lang} caption="solução" />
             ) : (
               <p className="text-[0.9rem] leading-relaxed"><RichText text={ex.solution} /></p>
             )}

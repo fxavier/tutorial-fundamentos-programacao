@@ -19,8 +19,9 @@ acrescentado à lista do `pretest`.
 Correr um ficheiro só: `npm run pretest && node --test tests/portugol.test.mjs`
 Correr um teste só: `node --test --test-name-pattern "ids são únicos" tests/content.test.mjs`
 
-[tests/predict.test.mjs](tests/predict.test.mjs) corre o código dos exercícios de previsão no
-`python3` do sistema e compara com o `accept` declarado. Sem `python3` os casos são saltados;
+[tests/predict.test.mjs](tests/predict.test.mjs) corre o código dos exercícios de previsão — os de
+Python no `python3` do sistema, os de JavaScript no worker do laboratório compilado para
+`.tmp/js-worker.mjs` — e compara com o `accept` declarado. Sem `python3` esses casos são saltados;
 os de pandas também, se o pacote não estiver instalado (`python3 -m venv v && v/bin/pip install
 pandas` e correr com esse `python3` no PATH para os verificar).
 
@@ -57,6 +58,19 @@ conteúdo sem correr `npm test` é a forma mais fácil de partir o build.
 `useSyncExternalStore` + `localStorage` (chave `fip:progress:v1`), sem biblioteca de estado. O
 mesmo ficheiro tem o `themeStore` (classe `.dark` no `<html>`). Nada vai para servidor nenhum.
 
+**Dois laboratórios de código.** Ambos correm num *web worker* (deliberadamente: um ciclo
+infinito de um aluno bloqueia só o worker, que o botão Parar mata) e partilham o cliente
+[src/lib/runner.ts](src/lib/runner.ts) e o `useCodeRunner`/`ConsoleOutput` de
+[Shell.tsx](src/components/widgets/Shell.tsx). Ao mexer aqui, confirma no browser — o `tsc` não
+apanha nada disto.
+
+**JavaScript e Node.** [src/lib/js.worker.ts](src/lib/js.worker.ts) executa o código num
+`AsyncFunction` (top-level await funciona) e constrói à volta um ambiente de Node: `console` com
+o formato do Node, `process`, `require` de módulos internos, um sistema de ficheiros em memória e
+`require("./x")` a partir dele. Só CommonJS — `import`/`export` dão um erro explicativo. Depois
+de o código resolver, espera-se pelos `setTimeout` pendentes (até 5 s) para os exemplos do event
+loop mostrarem a ordem certa.
+
 **Python no browser.** O laboratório corre CPython real via Pyodide, carregado de CDN em tempo
 de execução — é a única parte do projeto que precisa de internet, e a única dependência externa.
 [src/lib/python.worker.ts](src/lib/python.worker.ts) importa o Pyodide dentro de um *web worker*
@@ -65,10 +79,11 @@ substitui o `input()` por um shim que lê da caixa de entrada;
 [src/lib/python.ts](src/lib/python.ts) é o cliente, com um worker único partilhado por toda a
 aplicação. Ao mexer aqui, confirma no browser — o `tsc` não apanha nada disto.
 
-**Exercícios de previsão.** `kind: 'predict'` mostra `code`, pede a saída ao aluno, valida contra
-`accept` (normalizado por `normalizeAnswer`, que ignora espaços, acentos e pontuação) e permite
-executar o código a sério. Nunca inventes o valor de `accept`: corre o código e copia a saída — o
-`npm test` verifica-o.
+**Exercícios de previsão.** `kind: 'predict'` mostra `code` (na linguagem de `lang`, 'python' por
+omissão), pede a saída ao aluno, valida contra `accept` (normalizado por `normalizeAnswer`, que
+ignora espaços, acentos e pontuação) e permite executar o código a sério no laboratório certo.
+Nunca inventes o valor de `accept`: corre o código e copia a saída — o `npm test` verifica-o, os
+de Python no `python3` e os de JavaScript no próprio worker do laboratório.
 
 **Lógica pura em `src/lib/`.** `portugol.ts` (interpretador completo: léxico → parser →
 interpretador, com deteção de laços infinitos), `numbers.ts` (conversões, complemento de dois,

@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { useCallback, useState, type ReactNode } from 'react';
+import type { Runner, RunResult } from '../../lib/runner';
 
 export function WidgetShell({ title, subtitle, children, actions }: { title: string; subtitle?: string; children: ReactNode; actions?: ReactNode }) {
   return (
@@ -33,6 +34,46 @@ export function Stat({ label, value, mono = true }: { label: string; value: stri
     <div className="card px-3 py-2.5">
       <p className="text-[0.68rem] font-semibold tracking-wider text-muted uppercase">{label}</p>
       <p className={`mt-0.5 break-all text-sm font-bold text-strong ${mono ? 'font-mono' : ''}`}>{value}</p>
+    </div>
+  );
+}
+
+/** Estado de uma execução: partilhado pelos laboratórios de Python e de JavaScript. */
+export function useCodeRunner<Req>(runner: Runner<Req>) {
+  const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState('');
+  const [result, setResult] = useState<RunResult | null>(null);
+
+  const execute = useCallback(async (req: Req) => {
+    setBusy(true);
+    setStatus('');
+    setResult(null);
+    try {
+      setResult(await runner.run(req, setStatus));
+    } catch {
+      setResult({ output: [], error: 'Execução interrompida.', ms: 0 });
+    }
+    setStatus('');
+    setBusy(false);
+  }, [runner]);
+
+  return { busy, status, result, execute, abort: () => runner.stop(), clear: () => setResult(null) };
+}
+
+export function ConsoleOutput({ result, busy, status, empty }: { result: RunResult | null; busy: boolean; status: string; empty?: string }) {
+  return (
+    <div className="scrollbar-thin h-full min-h-40 overflow-auto rounded-xl border border-soft bg-slate-950 p-3 font-mono text-[0.8rem] leading-relaxed text-slate-100">
+      {busy && <div className="text-amber-300">{status || 'A executar…'}</div>}
+      {!busy && result === null && <span className="text-slate-500">{empty ?? 'Clica em “Executar” para veres o resultado.'}</span>}
+      {result?.output.map((l, i) => (
+        <div key={i} className={`whitespace-pre-wrap ${l.err ? 'text-rose-300' : ''}`}>{l.text || ' '}</div>
+      ))}
+      {result?.error && (
+        <div className="mt-2 rounded-lg border border-rose-500/50 bg-rose-500/10 px-2.5 py-2 text-rose-300">
+          <b>Erro:</b> {result.error}
+        </div>
+      )}
+      {result && !result.error && <div className="mt-2 text-emerald-400">✓ Terminou em {result.ms} ms.</div>}
     </div>
   );
 }
