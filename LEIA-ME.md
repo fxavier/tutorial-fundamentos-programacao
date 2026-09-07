@@ -1,6 +1,6 @@
 # Fundamentos de Informática e Programação
 
-Tutorial interativo, em português, que vai do transístor ao Node.js. Vinte módulos com
+Tutorial interativo, em português, que vai do transístor ao React. Vinte e quatro módulos com
 ferramentas interativas, quizzes com explicação e exercícios resolvidos — pensado para
 quem está a começar em programação e quer perceber o que acontece por baixo do código.
 
@@ -51,6 +51,10 @@ por isso funciona também a partir de um subdiretório ou do sistema de ficheiro
 | 18 | Assíncrono e o event loop | Callbacks, promessas, `async`/`await`, microtarefas, `Promise.all`, `fetch` |
 | 19 | JavaScript avançado | Closures, `this`, protótipos, estilo funcional, ESM/CommonJS, npm, TypeScript |
 | 20 | Node.js | Projeto e npm, módulos, ficheiros, CLI, EventEmitter, servidor HTTP, `node --test` |
+| 21 | HTML | Documento, semântica, imagens, formulários, tabelas, DOM, acessibilidade |
+| 22 | CSS | Seletores, cascata, box model, flexbox, grid, responsivo, variáveis e temas |
+| 23 | React | JSX, componentes, props, `useState`, eventos, listas e keys, formulários |
+| 24 | React na prática | `useEffect`, dados, `useRef`/`useMemo`, hooks próprios, Context, `useReducer`, Vite |
 
 ## Ferramentas interativas
 
@@ -58,7 +62,8 @@ Conversor de bases · bits ligados · complemento de dois · calculadora de arma
 texto para bits (ASCII/UTF-8) · IEEE 754 · mapa de memória · ciclo da CPU · pilha e heap ·
 simulador OSI · inspetor de pacote · tabela verdade · fluxogramas · teste de mesa ·
 **editor de Portugol executável** · **laboratório de Python com pandas** ·
-**laboratório de JavaScript e Node** · ordenação animada · pesquisa binária · gráfico Big-O ·
+**laboratório de JavaScript e Node** · **laboratório de HTML e CSS** ·
+**laboratório de React** · ordenação animada · pesquisa binária · gráfico Big-O ·
 tabela de tempos reais.
 
 O editor de Portugol é um interpretador escrito de raiz que corre no browser. Suporta
@@ -79,6 +84,11 @@ com o formato do Node, `process`, `require` de `fs`, `path`, `os`, `events`, `ut
 locais. Chega para os exemplos de módulos, ficheiros, CLI, eventos e testes correrem de verdade;
 o servidor HTTP fica como código para correr no teu computador.
 
+Os laboratórios de HTML/CSS e de React desenham a página num `<iframe sandbox>` a partir do
+que escreves, com a consola da página reencaminhada para a caixa de saída. O de HTML e CSS não
+descarrega nada; o de React vai buscar o React 18 e o Babel a um CDN para compilar o JSX no
+próprio browser.
+
 Os exercícios de previsão mostram um bloco de código e pedem a saída ao aluno; depois de
 responder, um botão executa o código a sério para comparar. As respostas aceites são
 verificadas em `npm test` — as de Python contra o `python3` local, as de JavaScript contra o
@@ -97,7 +107,7 @@ src/
     portugol.ts interpretador de Portugol (léxico, parser, interpretador)
     python.ts   cliente do worker de Python (+ python.worker.ts, que carrega o Pyodide)
     js.ts       cliente do worker de JavaScript (+ js.worker.ts, com o shim de Node)
-    runner.ts   cliente genérico partilhado pelos dois laboratórios
+    runner.ts   cliente genérico partilhado pelos laboratórios com worker
     numbers.ts  conversões entre bases, complemento de dois, UTF-8, IEEE 754
     sorting.ts  geradores de passos para as animações de ordenação
     progress.ts progresso guardado em localStorage

@@ -3,4 +3,5 @@ export const WIDGET_IDS = [
   'truth-table', 'portugol', 'sorting-visualizer', 'binary-search', 'ascii-explorer',
   'float-bits', 'twos-complement', 'bigo-chart', 'flowchart', 'desk-check', 'cpu-cycle',
   'stack-heap', 'packet-inspector', 'complexity-race', 'python-lab', 'js-lab',
+  'web-lab', 'react-lab',
 ];

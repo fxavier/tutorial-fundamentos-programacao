@@ -58,11 +58,20 @@ conteúdo sem correr `npm test` é a forma mais fácil de partir o build.
 `useSyncExternalStore` + `localStorage` (chave `fip:progress:v1`), sem biblioteca de estado. O
 mesmo ficheiro tem o `themeStore` (classe `.dark` no `<html>`). Nada vai para servidor nenhum.
 
-**Dois laboratórios de código.** Ambos correm num *web worker* (deliberadamente: um ciclo
-infinito de um aluno bloqueia só o worker, que o botão Parar mata) e partilham o cliente
-[src/lib/runner.ts](src/lib/runner.ts) e o `useCodeRunner`/`ConsoleOutput` de
+**Laboratórios de código.** Os de Python e de JavaScript correm num *web worker*
+(deliberadamente: um ciclo infinito de um aluno bloqueia só o worker, que o botão Parar mata) e
+partilham o cliente [src/lib/runner.ts](src/lib/runner.ts) e o `useCodeRunner`/`ConsoleOutput` de
 [Shell.tsx](src/components/widgets/Shell.tsx). Ao mexer aqui, confirma no browser — o `tsc` não
 apanha nada disto.
+
+**HTML/CSS e React.** [Web.tsx](src/components/widgets/Web.tsx) é o quarto e o quinto
+laboratório (`web-lab` e `react-lab` são o mesmo componente com `mode` diferente). Aqui o
+resultado é uma *página*, não texto, por isso não há worker nenhum: o código vai para um
+`<iframe sandbox>` por `srcdoc`, com uma ponte de `postMessage` que reencaminha o `console` e os
+erros para a caixa de saída. O modo React injeta React 18 UMD + Babel standalone de CDN (o React
+19 já não publica build UMD) e expõe `React`, os hooks e `createRoot` como globais — os exemplos
+não escrevem `import`. Consequência: um ciclo infinito **bloqueia a aba**, ao contrário dos
+outros laboratórios.
 
 **JavaScript e Node.** [src/lib/js.worker.ts](src/lib/js.worker.ts) executa o código num
 `AsyncFunction` (top-level await funciona) e constrói à volta um ambiente de Node: `console` com
@@ -79,7 +88,9 @@ substitui o `input()` por um shim que lê da caixa de entrada;
 [src/lib/python.ts](src/lib/python.ts) é o cliente, com um worker único partilhado por toda a
 aplicação. Ao mexer aqui, confirma no browser — o `tsc` não apanha nada disto.
 
-**Exercícios de previsão.** `kind: 'predict'` mostra `code` (na linguagem de `lang`, 'python' por
+**Exercícios de previsão.** Só existem para Python e JavaScript — HTML, CSS e JSX não têm saída
+de texto para comparar (nesses módulos o mesmo papel é feito por `kind: 'input'`, e o `lang`
+serve só para o realce do bloco de código). `kind: 'predict'` mostra `code` (na linguagem de `lang`, 'python' por
 omissão), pede a saída ao aluno, valida contra `accept` (normalizado por `normalizeAnswer`, que
 ignora espaços, acentos e pontuação) e permite executar o código a sério no laboratório certo.
 Nunca inventes o valor de `accept`: corre o código e copia a saída — o `npm test` verifica-o, os

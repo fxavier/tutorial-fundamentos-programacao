@@ -129,7 +129,7 @@ export function Exercises({ items }: { items: Exercise[] }) {
       <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold">Exercícios</h2>
-          <p className="text-sm text-muted">Resolve à mão, ou no editor de Portugol e no laboratório de Python, antes de veres a solução.</p>
+          <p className="text-sm text-muted">Resolve à mão, ou nos laboratórios de código, antes de veres a solução.</p>
         </div>
         <span className="chip surface-sunken text-muted">{done} de {items.length} resolvidos</span>
       </header>

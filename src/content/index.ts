@@ -19,8 +19,12 @@ import { m17 } from './m17-javascript';
 import { m18 } from './m18-javascript-async';
 import { m19 } from './m19-javascript-avancado';
 import { m20 } from './m20-nodejs';
+import { m21 } from './m21-html';
+import { m22 } from './m22-css';
+import { m23 } from './m23-react';
+import { m24 } from './m24-react-avancado';
 
-export const MODULES: Module[] = [m01, m02, m03, m04, m05, m06, m07, m08, m09, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20];
+export const MODULES: Module[] = [m01, m02, m03, m04, m05, m06, m07, m08, m09, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23, m24];
 
 export const TRACKS = [
   { id: 'hardware', name: 'Como a máquina funciona', modules: ['computador', 'binario', 'memoria', 'redes'], color: 'from-sky-500 to-cyan-500' },
@@ -28,6 +32,8 @@ export const TRACKS = [
   { id: 'engenharia', name: 'Engenharia de software', modules: ['estruturas', 'complexidade', 'paradigmas', 'ferramentas', 'proximos-passos'], color: 'from-emerald-500 to-teal-500' },
   { id: 'python', name: 'Python na prática', modules: ['python', 'python-estruturas', 'python-poo', 'pandas'], color: 'from-amber-500 to-orange-500' },
   { id: 'javascript', name: 'JavaScript e Node.js', modules: ['javascript', 'javascript-async', 'javascript-avancado', 'nodejs'], color: 'from-yellow-500 to-lime-500' },
+  { id: 'web', name: 'HTML e CSS', modules: ['html', 'css'], color: 'from-orange-500 to-rose-500' },
+  { id: 'react', name: 'React', modules: ['react', 'react-avancado'], color: 'from-cyan-500 to-blue-500' },
 ];
 
 export function getModule(id: string): Module | undefined {
@@ -107,4 +113,26 @@ export const GLOSSARY: GlossaryEntry[] = [
   { term: 'Protótipo', def: 'Objeto de onde outro herda propriedades. As classes de JavaScript são açúcar sobre esta cadeia.', module: 'javascript-avancado' },
   { term: 'this', def: 'Em JavaScript depende de como a função é chamada, não de onde foi escrita.', module: 'javascript-avancado' },
   { term: 'TypeScript', def: 'JavaScript com tipos verificados na compilação. Os tipos são apagados e não existem em execução.', module: 'javascript-avancado' },
+  { term: 'Acessibilidade (a11y)', def: 'Escrever páginas utilizáveis por quem usa leitor de ecrã, só teclado ou baixa visão. Nasce quase toda de HTML correto.', module: 'html' },
+  { term: 'Box model', def: 'A caixa de cada elemento: conteúdo, padding, borda e margem. Com `box-sizing: border-box` a largura declarada já inclui padding e borda.', module: 'css' },
+  { term: 'Cascata', def: 'A ordem por que o CSS decide entre regras em conflito: importância, depois especificidade, depois ordem de escrita.', module: 'css' },
+  { term: 'Componente', def: 'Função que devolve JSX. É a unidade de reutilização do React; o nome começa por maiúscula.', module: 'react' },
+  { term: 'Context', def: 'Mecanismo do React para dar um valor a toda uma subárvore sem o passar por props em cada nível.', module: 'react-avancado' },
+  { term: 'DOM', def: 'A árvore de objetos que o browser constrói a partir do HTML e que o JavaScript manipula. Não é o ficheiro, é a página viva em memória.', module: 'html' },
+  { term: 'Efeito (useEffect)', def: 'Código que corre depois do render para sincronizar com algo fora do React, com uma função de limpeza e uma lista de dependências.', module: 'react-avancado' },
+  { term: 'Especificidade', def: 'O peso de um seletor, contado como (ids, classes, elementos). Decide qual regra ganha quando duas competem.', module: 'css' },
+  { term: 'Estado (React)', def: 'Dados que um componente guarda entre renders e cuja alteração faz o React redesenhar. Cria-se com `useState`.', module: 'react' },
+  { term: 'Flexbox', def: 'Modelo de layout do CSS que distribui os filhos ao longo de um eixo. Para filas de coisas: barras, listas de cartões.', module: 'css' },
+  { term: 'Grid (CSS)', def: 'Modelo de layout em linhas e colunas ao mesmo tempo. Para o esqueleto da página e galerias.', module: 'css' },
+  { term: 'Hook', def: 'Função do React chamada no topo de um componente (`useState`, `useEffect`, …). Um hook próprio é uma função `use*` que usa outros hooks.', module: 'react-avancado' },
+  { term: 'HTML', def: 'Linguagem de marcação que descreve o significado e a estrutura do conteúdo de uma página.', module: 'html' },
+  { term: 'JSX', def: 'Sintaxe que permite escrever marcação dentro do JavaScript. É compilada em chamadas que devolvem objetos, não em HTML.', module: 'react' },
+  { term: 'Key (React)', def: 'Identificador estável de cada item de uma lista, que diz ao React qual elemento antigo corresponde a qual novo.', module: 'react' },
+  { term: 'Media query', def: 'Bloco de CSS que só se aplica em certas condições — largura do ecrã, tema do sistema, preferência por menos movimento.', module: 'css' },
+  { term: 'Props', def: 'Dados que um componente recebe do pai. São só de leitura: o fluxo desce, e as alterações sobem por funções.', module: 'react' },
+  { term: 'Reducer', def: 'Função pura `(estado, ação) => novo estado` que concentra todas as transições possíveis de um estado.', module: 'react-avancado' },
+  { term: 'Render', def: 'A chamada de um componente para produzir a descrição da interface. O React compara-a com a anterior e só altera no DOM o que mudou.', module: 'react' },
+  { term: 'Semântica (HTML)', def: 'Escolher o elemento pelo significado (`nav`, `main`, `button`) e não pelo aspeto. É o que dá sentido à página para máquinas e tecnologias de apoio.', module: 'html' },
+  { term: 'Variável CSS', def: 'Propriedade personalizada (`--cor: …`) que se lê com `var(--cor)`, se herda e pode ser trocada por tema.', module: 'css' },
+  { term: 'Viewport', def: 'A área visível da página. A meta tag `viewport` impede o telemóvel de simular um ecrã largo e encolher tudo.', module: 'html' },
 ];
