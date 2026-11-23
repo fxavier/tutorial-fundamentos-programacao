@@ -120,7 +120,6 @@ export function Layout({ children }: { children: ReactNode }) {
 
       <footer className="border-t border-soft px-4 py-6 text-center text-xs text-muted">
         Tutorial interativo de fundamentos de informática e programação · o teu progresso fica guardado neste browser
-        <div className="mt-2">© {new Date().getFullYear()} · Feito por Xavier Francisco Nhagumbe</div>
       </footer>
     </div>
   );

@@ -4,9 +4,6 @@ import { progress, useProgress } from '../lib/progress';
 import { RichText } from './RichText';
 import { CodeBlock } from './CodeBlock';
 import { normalizeAnswer } from '../lib/numbers';
-import { usePython } from './widgets/Python';
-import { useJs } from './widgets/Js';
-import { ConsoleOutput } from './widgets/Shell';
 
 function DifficultyDots({ level }: { level: 1 | 2 | 3 }) {
   return (
@@ -18,10 +15,6 @@ function DifficultyDots({ level }: { level: 1 | 2 | 3 }) {
   );
 }
 
-const KIND_LABEL: Record<Exercise['kind'], string> = {
-  code: 'código', input: 'resposta curta', open: 'reflexão', predict: 'prevê a saída',
-};
-
 function ExerciseCard({ ex }: { ex: Exercise }) {
   const state = useProgress();
   const done = state.exercises[ex.id] ?? false;
@@ -29,10 +22,6 @@ function ExerciseCard({ ex }: { ex: Exercise }) {
   const [hint, setHint] = useState(false);
   const [value, setValue] = useState('');
   const [check, setCheck] = useState<'idle' | 'ok' | 'no'>('idle');
-  const py = usePython();
-  const js = useJs();
-  const lang = ex.lang ?? 'python';
-  const run = lang === 'js' ? js : py;
 
   const verify = () => {
     const accepted = (ex.accept ?? []).map(normalizeAnswer);
@@ -53,46 +42,25 @@ function ExerciseCard({ ex }: { ex: Exercise }) {
         </button>
         <h3 className={`flex-1 font-semibold text-strong ${done ? 'line-through opacity-60' : ''}`}>{ex.title}</h3>
         <DifficultyDots level={ex.difficulty} />
-        <span className="chip surface-sunken text-muted">{KIND_LABEL[ex.kind]}</span>
+        <span className="chip surface-sunken text-muted">{ex.kind === 'code' ? 'código' : ex.kind === 'input' ? 'resposta curta' : 'reflexão'}</span>
       </div>
 
       <div className="border-t border-soft px-4 py-3.5">
         <p className="text-[0.92rem] leading-relaxed"><RichText text={ex.statement} /></p>
 
-        {ex.kind === 'predict' && ex.code && (
-          <CodeBlock code={ex.code} lang={lang} caption="que saída produz este código?" />
-        )}
-
-        {(ex.kind === 'input' || ex.kind === 'predict') && (
+        {ex.kind === 'input' && (
           <div className="mt-3 flex flex-wrap gap-2">
             <input
               className="field max-w-xs flex-1"
               value={value}
               onChange={(e) => { setValue(e.target.value); setCheck('idle'); }}
               onKeyDown={(e) => e.key === 'Enter' && verify()}
-              placeholder={ex.kind === 'predict' ? 'a saída que esperas' : 'a tua resposta'}
+              placeholder="a tua resposta"
               aria-label={`Resposta para: ${ex.title}`}
             />
             <button className="btn btn-primary" onClick={verify} disabled={!value.trim()}>Verificar</button>
-            {ex.kind === 'predict' && ex.code && (
-              <button
-                className="btn btn-ghost"
-                onClick={() => run.execute(lang === 'js' ? { code: ex.code! } : { code: ex.code!, packages: ex.packages })}
-                disabled={run.busy || !value.trim()}
-                title={value.trim() ? 'Corre o código a sério' : 'Escreve primeiro a tua previsão'}
-              >
-                {run.busy ? 'A correr…' : '▶ Confirmar a correr'}
-              </button>
-            )}
             {check === 'ok' && <span className="self-center text-sm font-semibold text-emerald-600 dark:text-emerald-400">✓ Certo!</span>}
             {check === 'no' && <span className="self-center text-sm font-semibold text-rose-600 dark:text-rose-400">✗ Ainda não. Tenta outra vez.</span>}
-          </div>
-        )}
-
-        {(run.busy || run.result) && (
-          <div className="mt-3">
-            <span className="mb-1 block text-xs font-semibold tracking-wide text-muted uppercase">Saída real</span>
-            <ConsoleOutput result={run.result} busy={run.busy} status={run.status} />
           </div>
         )}
 
@@ -110,9 +78,9 @@ function ExerciseCard({ ex }: { ex: Exercise }) {
         {open && (
           <div className="mt-3 rounded-xl border border-soft surface-sunken p-3.5">
             {ex.solution.includes('\n') && (ex.kind === 'code' || ex.solution.trimStart().startsWith('algoritmo')) ? (
-              <CodeBlock code={ex.solution} lang={ex.solution.trimStart().startsWith('algoritmo') ? 'portugol' : lang} caption="solução" />
+              <CodeBlock code={ex.solution} lang="portugol" caption="solução" />
             ) : (
-              <p className="text-[0.9rem] leading-relaxed"><RichText text={ex.solution} /></p>
+              <p className="whitespace-pre-wrap text-[0.9rem] leading-relaxed"><RichText text={ex.solution} /></p>
             )}
           </div>
         )}
@@ -129,7 +97,7 @@ export function Exercises({ items }: { items: Exercise[] }) {
       <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold">Exercícios</h2>
-          <p className="text-sm text-muted">Resolve à mão, ou nos laboratórios de código, antes de veres a solução.</p>
+          <p className="text-sm text-muted">Resolve à mão ou no editor de Portugol antes de veres a solução.</p>
         </div>
         <span className="chip surface-sunken text-muted">{done} de {items.length} resolvidos</span>
       </header>
